@@ -1,0 +1,37 @@
+[package]
+name = "rebound"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+fly-client = { path = "../crates/fly-client" }
+tailscale-client = { path = "../crates/tailscale-client" }
+
+axum = { version = "0.8", features = ["macros"] }
+aide = { version = "0.15", features = ["axum", "macros", "axum-json"] }
+schemars = { version = "0.9", features = ["chrono04"] }
+
+tower = "0.5"
+tower-http = { version = "0.6", features = ["cors"] }
+
+tokio = { version = "1", features = ["full"] }
+async-trait = "0.1"
+
+anyhow = "1"
+
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+uuid = { version = "1", features = ["v7", "serde", "fast-rng"] }
+bs58 = "0.5"
+
+deadpool-postgres = "0.14"
+tokio-postgres = { version = "0.7", features = ["with-chrono-0_4"] }
+refinery = { version = "0.9", features = ["postgres"] }
+
+chrono = { version = "0.4", features = ["now", "serde"] }
+
+log = "0.4"
+env_logger = "0.11"
+
+clap = { version = "4", features = ["derive"] }
