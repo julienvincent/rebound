@@ -1,20 +1,20 @@
-FROM node:24.8 AS builder
+FROM node:25.9 AS builder
 WORKDIR /app
 
-ENV PNPM_HOME="/pnpm"
+ENV PNPM_HOME="/root/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 
 RUN npm i -g pnpm@10 rust-just
 
 COPY interface/Justfile interface/
 
-COPY client/ client
-RUN cd client; pnpm install --frozen-lockfile
+COPY packages/ packages
+COPY interface/ interface
 
-COPY interface/package.json interface/pnpm-lock.yaml interface/
-RUN cd interface; pnpm install --frozen-lockfile
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 
-COPY ./interface/ interface
+RUN --mount=type=cache,target=/root/pnpm \
+    pnpm install --frozen-lockfile
 
 RUN cd interface; just build
 

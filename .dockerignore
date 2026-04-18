@@ -1,0 +1,7 @@
+**/node_modules/**
+**/dist/**
+**/.tanstack/**
+**/target/**
+api/deployment/
+interface/deployment/
+**/public/config.json
