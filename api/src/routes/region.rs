@@ -24,20 +24,12 @@ pub static REGIONS: &[Region] = &[
     name: "Stockholm, Sweden",
   },
   Region {
-    code: "bog",
-    name: "Bogotá, Colombia",
-  },
-  Region {
-    code: "bos",
-    name: "Boston, Massachusetts (US)",
+    code: "bom",
+    name: "Mumbai, India",
   },
   Region {
     code: "cdg",
     name: "Paris, France",
-  },
-  Region {
-    code: "den",
-    name: "Denver, Colorado (US)",
   },
   Region {
     code: "dfw",
@@ -52,20 +44,8 @@ pub static REGIONS: &[Region] = &[
     name: "Frankfurt, Germany",
   },
   Region {
-    code: "gdl",
-    name: "Guadalajara, Mexico",
-  },
-  Region {
-    code: "gig",
-    name: "Rio de Janeiro, Brazil",
-  },
-  Region {
     code: "gru",
     name: "São Paulo, Brazil",
-  },
-  Region {
-    code: "hkg",
-    name: "Hong Kong",
   },
   Region {
     code: "iad",
@@ -84,14 +64,6 @@ pub static REGIONS: &[Region] = &[
     name: "London, United Kingdom",
   },
   Region {
-    code: "mad",
-    name: "Madrid, Spain",
-  },
-  Region {
-    code: "mia",
-    name: "Miami, Florida (US)",
-  },
-  Region {
     code: "nrt",
     name: "Tokyo, Japan",
   },
@@ -100,28 +72,8 @@ pub static REGIONS: &[Region] = &[
     name: "Chicago, Illinois (US)",
   },
   Region {
-    code: "otp",
-    name: "Bucharest, Romania",
-  },
-  Region {
-    code: "phx",
-    name: "Phoenix, Arizona (US)",
-  },
-  Region {
-    code: "qro",
-    name: "Querétaro, Mexico",
-  },
-  Region {
-    code: "scl",
-    name: "Santiago, Chile",
-  },
-  Region {
-    code: "sea",
-    name: "Seattle, Washington (US)",
-  },
-  Region {
     code: "sin",
-    name: "Singapore",
+    name: "Singapore, Singapore",
   },
   Region {
     code: "sjc",
@@ -130,14 +82,6 @@ pub static REGIONS: &[Region] = &[
   Region {
     code: "syd",
     name: "Sydney, Australia",
-  },
-  Region {
-    code: "waw",
-    name: "Warsaw, Poland",
-  },
-  Region {
-    code: "yul",
-    name: "Montreal, Canada",
   },
   Region {
     code: "yyz",
