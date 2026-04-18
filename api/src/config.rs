@@ -15,7 +15,8 @@ pub struct FlyConfig {
 
 #[derive(serde::Deserialize, serde::Serialize, Clone)]
 pub struct TailscaleConfig {
-  pub api_key: String,
+  pub client_id: String,
+  pub client_secret: String,
   pub tailnet: String,
   pub exit_node_tag: Option<String>,
 }

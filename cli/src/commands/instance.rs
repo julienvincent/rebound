@@ -445,10 +445,8 @@ fn stop(
     None => prompt_stop_instance(client, rt)?,
   };
 
-  let response: StopResponse = rt.block_on(client.post(
-    "/instance/stop",
-    &StopRequest { id: id.clone() },
-  ))?;
+  let response: StopResponse =
+    rt.block_on(client.post("/instance/stop", &StopRequest { id: id.clone() }))?;
 
   if is_async {
     return output::render_one(response, output);
@@ -511,9 +509,11 @@ fn prompt_stop_instance(client: &Client, rt: &tokio::runtime::Runtime) -> Result
     .prompt()
     .context("Instance selection cancelled")?;
 
-  Ok(selection
-    .split(" | ")
-    .next()
-    .unwrap_or_default()
-    .to_string())
+  Ok(
+    selection
+      .split(" | ")
+      .next()
+      .unwrap_or_default()
+      .to_string(),
+  )
 }

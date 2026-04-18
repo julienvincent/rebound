@@ -50,7 +50,8 @@ impl System {
 
     let fly_client = Arc::new(FlyClient::new(&config.fly.api_token));
     let tailscale_client = Arc::new(TailscaleClient::new(
-      &config.tailscale.api_key,
+      &config.tailscale.client_id,
+      &config.tailscale.client_secret,
       &config.tailscale.tailnet,
     ));
     let exit_node_tag = config
