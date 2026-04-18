@@ -1,0 +1,7 @@
+# extends: [recommended]
+telemetry: false
+apis:
+  rebound@v1:
+    root: ../../openapi/api.json
+    x-openapi-ts:
+      output: ./src/types.ts

@@ -1,0 +1,14 @@
+default:
+    just --list
+
+run:
+    pnpm vite --port 4433
+
+check:
+    pnpm tsc -b
+
+build:
+    just check && pnpm vite build
+
+deploy *args:
+    cd deployment && pulumi up --stack julienvincent/root {{ args }}

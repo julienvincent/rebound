@@ -1,8 +1,0 @@
-default:
-    @just --list
-
-run:
-    cargo run --bin rebound -- serve --config config.local.json
-
-migrate:
-    cargo run --bin rebound -- migrate --config config.local.json

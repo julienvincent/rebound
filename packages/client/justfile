@@ -1,0 +1,5 @@
+default:
+    just --list
+
+gen:
+    pnpm openapi-typescript --root-types
