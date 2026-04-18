@@ -1,7 +1,7 @@
 CREATE SCHEMA IF NOT EXISTS rebound;
 
 CREATE TABLE rebound.instance (
-  id text PRIMARY KEY,
+  id text COLLATE "C" PRIMARY KEY,
   status text NOT NULL DEFAULT 'launching',
   region text NOT NULL,
   vm_memory_mb integer NOT NULL,
