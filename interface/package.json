@@ -1,7 +1,4 @@
 {
-  "name": "julienvincent.io",
-  "private": true,
-  "version": "0.0.0",
   "type": "module",
   "dependencies": {
     "@julienvincent/rebound-client": "workspace:*",

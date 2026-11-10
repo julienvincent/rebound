@@ -14,7 +14,7 @@ const sha = new Promise(async (resolve) => {
 });
 
 const cluster_reference = new pulumi.StackReference("cluster", {
-  name: "julienvincent/daedalus-cluster/root",
+  name: "julienvincent/daedalus-cluster-master/root",
 });
 
 const k8s = new pulumi.StackReference("kubernetes", {
@@ -27,11 +27,15 @@ const postgres_stack = new pulumi.StackReference("postgres", {
 
 const provider = new kubernetes.Provider("root-provider", {
   kubeconfig: cluster_reference.requireOutput("kubeconfig_yaml"),
+  clusterIdentifier: "daedalus",
 });
 
 const issuers = k8s.requireOutput("issuers") as pulumi.Output<
   Record<string, string>
 >;
+const gateways = k8s.requireOutput("gateways") as pulumi.Output<{
+  internal: { name: string; namespace: string };
+}>;
 
 const image = new docker.Image("api", {
   imageName: pulumi.interpolate`registry.julienvincent.io/rebound-api:${sha}`,
@@ -325,63 +329,74 @@ const service = new kubernetes.core.v1.Service(
 );
 
 const domain = "api.rebound.julienvincent.io";
-const cert_secret_name = `api-rebound-julienvincent-io-tls`;
-new kubernetes.apiextensions.CustomResource(
-  "api-rebound-julienvincent-io",
+const cert_secret_name = "rebound-api-tls-tls";
+const certificate = new kubernetes.apiextensions.CustomResource(
+  "rebound-api-tls",
   {
     apiVersion: "cert-manager.io/v1",
     kind: "Certificate",
-    metadata: {
-      namespace,
-      labels: {
-        solver: "dns01",
-      },
-    },
+    metadata: { namespace, labels: { solver: "dns01" } },
     spec: {
       secretName: cert_secret_name,
       dnsNames: [domain],
-      issuerRef: {
-        kind: "ClusterIssuer",
-        name: issuers.letsencrypt,
-      },
+      issuerRef: { kind: "ClusterIssuer", name: issuers.letsencrypt },
     },
   },
   options,
 );
 
-new kubernetes.networking.v1.Ingress(
-  "api-rebound-julienvincent-io",
+const listener_set = new kubernetes.apiextensions.CustomResource(
+  "rebound-api",
   {
-    metadata: {
-      namespace,
-    },
+    apiVersion: "gateway.networking.k8s.io/v1",
+    kind: "ListenerSet",
+    metadata: { namespace },
     spec: {
-      ingressClassName: "nginx-internal",
-      tls: [
+      parentRef: {
+        group: "gateway.networking.k8s.io",
+        kind: "Gateway",
+        name: gateways.internal.name,
+        namespace: gateways.internal.namespace,
+      },
+      listeners: [
         {
-          hosts: [domain],
-          secretName: cert_secret_name,
-        },
-      ],
-      rules: [
-        {
-          host: domain,
-          http: {
-            paths: [
-              {
-                pathType: "Prefix",
-                path: "/",
-                backend: {
-                  service: {
-                    name: service.metadata.name,
-                    port: {
-                      name: "http",
-                    },
-                  },
-                },
-              },
+          name: "https-0",
+          hostname: domain,
+          port: 443,
+          protocol: "HTTPS",
+          tls: {
+            mode: "Terminate",
+            certificateRefs: [
+              { group: "", kind: "Secret", name: cert_secret_name },
             ],
           },
+        },
+      ],
+    },
+  },
+  { ...options, dependsOn: certificate },
+);
+
+new kubernetes.apiextensions.CustomResource(
+  "rebound-api-https",
+  {
+    apiVersion: "gateway.networking.k8s.io/v1",
+    kind: "HTTPRoute",
+    metadata: { namespace },
+    spec: {
+      parentRefs: [
+        {
+          group: "gateway.networking.k8s.io",
+          kind: "ListenerSet",
+          name: listener_set.metadata.name,
+          sectionName: "https-0",
+        },
+      ],
+      hostnames: [domain],
+      rules: [
+        {
+          timeouts: { request: "0s", backendRequest: "0s" },
+          backendRefs: [{ name: service.metadata.name, port: 80 }],
         },
       ],
     },

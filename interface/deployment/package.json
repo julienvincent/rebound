@@ -1,11 +1,12 @@
 {
+  "type": "module",
   "dependencies": {
     "@pulumi/docker": "^4.5.3",
-    "@pulumi/kubernetes": "^4.9.1",
-    "@pulumi/pulumi": "^3.112.0"
+    "@pulumi/kubernetes": "4.31.1",
+    "@pulumi/pulumi": "3.242.0"
   },
   "devDependencies": {
-    "@types/node": "^20.12.5",
-    "typescript": "^5.4.4"
+    "@types/node": "25.9.1",
+    "typescript": "5.9.3"
   }
 }
